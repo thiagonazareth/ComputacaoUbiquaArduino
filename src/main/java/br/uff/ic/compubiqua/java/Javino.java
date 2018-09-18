@@ -1,5 +1,4 @@
-package com.mycompany.arduinoaula1;
-
+package br.uff.ic.compubiqua.java;
 
 import java.io.BufferedReader;
 import java.io.File;

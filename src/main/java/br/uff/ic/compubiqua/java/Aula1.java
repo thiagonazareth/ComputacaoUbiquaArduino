@@ -3,13 +3,16 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package com.mycompany.arduinoaula1;
+package br.uff.ic.compubiqua.java;
 
+import br.uff.ic.compubiqua.java.Javino;
+import static com.sun.org.apache.xalan.internal.xsltc.compiler.util.Type.Int;
 import java.awt.BorderLayout;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JComboBox;
 import javax.swing.JFrame;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
@@ -17,12 +20,13 @@ import org.jfree.chart.JFreeChart;
 import org.jfree.chart.plot.PlotOrientation;
 import org.jfree.data.xy.DefaultXYDataset;
 import org.jfree.data.xy.XYDataset;
+import sun.awt.X11.XConstants;
 
 /**
  *
  * @author thiago
  */
-public class NewJFrame extends javax.swing.JFrame {
+public class Aula1 extends javax.swing.JFrame {
     
     static List<Double> leituras = new ArrayList<>();
     static List<Double> listaTemperatureValues = new ArrayList<>();
@@ -33,13 +37,15 @@ public class NewJFrame extends javax.swing.JFrame {
     static ChartPanel cp;
     static XYDataset ds;
     
-    private Javino jBridge = new Javino("/anaconda3/envs/python2710/bin");
-    private String porta = "/dev/cu.usbmodem1421";
-
+    private static Javino jBridge = new Javino("/anaconda3/envs/python2710/bin");
+    private static String porta = "/dev/cu.usbmodem1421";
+    
+    private static String LIGAR = "ler";
+    
     /**
      * Creates new form NewJFrame
      */
-    public NewJFrame() {
+    public Aula1() {
         initComponents();
         cp = new ChartPanel(chart);
     }
@@ -56,6 +62,7 @@ public class NewJFrame extends javax.swing.JFrame {
         jFrame1 = new javax.swing.JFrame();
         panel1 = new java.awt.Panel();
         button1 = new java.awt.Button();
+        label1 = new java.awt.Label();
 
         javax.swing.GroupLayout jFrame1Layout = new javax.swing.GroupLayout(jFrame1.getContentPane());
         jFrame1.getContentPane().setLayout(jFrame1Layout);
@@ -78,36 +85,44 @@ public class NewJFrame extends javax.swing.JFrame {
         );
         panel1Layout.setVerticalGroup(
             panel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 346, Short.MAX_VALUE)
+            .addGap(0, 497, Short.MAX_VALUE)
         );
 
-        button1.setLabel("button1");
+        button1.setLabel("Iniciar Coleta de Dados");
         button1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 button1ActionPerformed(evt);
             }
         });
 
+        label1.setText("Para rodar, você deve usar o sensor de distância nos pinos digitais 4 e 5 e o sensor de luminosidade no pino analógico A0");
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(button1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(30, 30, 30))
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGap(22, 22, 22)
                         .addComponent(panel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(276, 276, 276)
-                        .addComponent(button1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(18, Short.MAX_VALUE))
+                        .addContainerGap()
+                        .addComponent(label1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(154, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(42, 42, 42)
+                .addContainerGap()
+                .addComponent(label1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(21, 21, 21)
                 .addComponent(button1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(34, 34, 34)
                 .addComponent(panel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addContainerGap())
         );
@@ -116,6 +131,12 @@ public class NewJFrame extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void button1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_button1ActionPerformed
+        
+//        this.jBridge.sendCommand(porta, "on");
+////        if(jBridge.listenArduino(porta, LIGAR)){
+////            System.out.println("LIGOU");
+////        }
+        
         UIUpdater t = new UIUpdater();
         t.start();
     }//GEN-LAST:event_button1ActionPerformed
@@ -137,28 +158,28 @@ public class NewJFrame extends javax.swing.JFrame {
                 }
             }
         } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(NewJFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Aula1.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(NewJFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Aula1.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(NewJFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Aula1.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(NewJFrame.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+            java.util.logging.Logger.getLogger(Aula1.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
+        //</editor-fold>
         //</editor-fold>
 
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                new NewJFrame().setVisible(true);
+                new Aula1().setVisible(true);
             }
         });
     }
     
     private static XYDataset createDataset() {
 
-        listaTemperatureValues.add(generateRandomicValue());
-        listLuminosidade.add(generateRandomicValue());
+        readSensorValue();
         leituras.add(i++);
 
         DefaultXYDataset ds = new DefaultXYDataset();
@@ -187,11 +208,19 @@ public class NewJFrame extends javax.swing.JFrame {
         return ds;
     }
 
-    private static double generateRandomicValue() {
-        double value = Math.random();
-        return value;
+    private static void readSensorValue() {
+        Double temp = 0d;
+        Double dist = 0d;
+        String leitura = null;
+        if(jBridge.requestData(porta, LIGAR)){
+            leitura = jBridge.getData();
+            temp = Double.parseDouble(leitura.split(" ")[0]);
+            dist = Double.parseDouble(leitura.split(" ")[1]);
+            listaTemperatureValues.add(temp);
+            listLuminosidade.add(dist);
+        }
     }
-
+    
     class UIUpdater extends Thread {
 
         @Override
@@ -207,7 +236,7 @@ public class NewJFrame extends javax.swing.JFrame {
                             "x", "y", ds, PlotOrientation.VERTICAL, true, true,
                             false);
                     cp.setChart(chart);
-                    cp.setSize(400, 300);
+                    cp.setSize(500, 400);
                     cp.setDomainZoomable(true);
 //                    cp.repaint();
 
@@ -219,11 +248,12 @@ public class NewJFrame extends javax.swing.JFrame {
 
                 } catch (Exception e) {
                     System.out.println("Error: " + e);
+                    e.printStackTrace();
                 } finally {
                     try {
                         Thread.sleep(2000);
                     } catch (InterruptedException ex) {
-                        Logger.getLogger(App.class.getName()).log(Level.SEVERE, null, ex);
+                        Logger.getLogger(Aula1.class.getName()).log(Level.SEVERE, null, ex);
                         ex.printStackTrace();
                     }
                 }
@@ -231,9 +261,18 @@ public class NewJFrame extends javax.swing.JFrame {
         }
     }
     
+    private String ligarSensor(){
+        String teste = "";
+        if(jBridge.requestData(porta, LIGAR)){
+            teste = jBridge.getData();
+        }
+        return teste;
+    }
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private java.awt.Button button1;
     private javax.swing.JFrame jFrame1;
+    private java.awt.Label label1;
     private java.awt.Panel panel1;
     // End of variables declaration//GEN-END:variables
 }
